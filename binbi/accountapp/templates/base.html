@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link  href="{% static 'css/base.css' %}" rel="stylesheet">
+    <link  href="{% static 'css/base_table.css' %}" rel="stylesheet">
+    <link  href="{% static 'css/base_mobile.css' %}" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header class="header">
+
+        {% if request.user.is_authenticated %}
+            <div class="header-auth">
+                <div class="logo-header">
+                    <img src="#" alt="логотип">
+                </div>
+                <span class="user">
+                    Привет {{ request.user.first_name|default:request.user.username }}
+                </span>
+            </div>
+
+
+        {% else %}
+            <div class="header-noauth">
+                <img   src="#" alt="logo">
+            </div>
+
+        {% endif %}
+
+    </header>
+    <main class="main ">
+
+        {% block content %}
+            <h1>Добро пожаловать</h1>
+        {% endblock %}
+
+
+    </main>
+    <footer class="footer">
+        <p class="text-autor">&copy;Все права защищены</p>
+        <p class="text-autor">2024</p>
+    </footer>
+
+</body>
+</html>

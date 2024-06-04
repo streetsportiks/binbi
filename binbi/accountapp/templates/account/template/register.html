@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Регистрация пользователя{% endblock %}
+
+{% block content %}
+    <div id="particles-js"></div>
+    <script type="text/javascript" src="{% static 'js/particles.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/lib/stats.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/particl_config.js' %}"></script>
+
+    <section class="forms-registration form-reg-reg">
+        <h1 class="title">Регистрация пользователя</h1>
+        <p class="text text-reg-form">Для регистрации заполните форму</p>
+        <div class="form">
+            <form class="form-field for-field-reg" method="post">
+                {{ user_form.as_p }}
+                {% csrf_token %}
+                <p class="button_login" ><input class="field_button" type="submit" value="Зарегестрироваться"></p>
+            </form>
+        </div>
+    </section>
+{% endblock %}

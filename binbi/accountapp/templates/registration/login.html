@@ -1,0 +1,50 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Binbi {% endblock %}
+
+{% block content %}
+
+<!-- particles.js container -->
+    <div id="particles-js"></div>
+    <script type="text/javascript" src="{% static 'js/particles.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/lib/stats.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/particl_config.js' %}"></script>
+
+    <section class="forms-registration">
+        <h1 class="title">Войти в систему</h1>
+            {% if form.errors %}
+            <p class="error-login">
+                Ваше имя пользователя и пароль не совпали.
+                Пожалуйста повторите попытку
+            </p>
+            {% else %}
+            <p class="text">
+                Введите данные для входа в систему или
+                зарегистрируйтесь
+            </p>
+            {% endif %}
+            <div class="form">
+                <form class="form-field" action="{% url 'login' %}" method="post"> <!--Перенаправление на страницу входа -->
+                    {{ form.as_p }}
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ next }}"> <!-- Скрытый параметр входа-->
+                    <p class="button_login" ><input class="field_button" type="submit" value="Войти"></p>
+                </form>
+                <p class="form-link">
+                    <a
+                        href="{% url 'password_reset' %}">
+                        Сбросить пароль
+                    </a>
+                    <a
+                        href="{% url 'register' %}">
+                        Регистрация
+                    </a>
+                </p>
+            </div>
+
+    </section>
+
+{% endblock %}
+
+
