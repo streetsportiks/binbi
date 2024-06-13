@@ -3,3 +3,9 @@
 *.sqlite3
 *.log
 *.pyc
+
+binbi/Binbi.Parser/.env
+binbi/Binbi.Parser/.idea
+binbi/Binbi.Parser/*.sln
+binbi/Binbi.Parser/Binbi.Parser/bin
+binbi/Binbi.Parser/Binbi.Parser/obj

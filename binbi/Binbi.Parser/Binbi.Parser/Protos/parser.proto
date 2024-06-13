@@ -1,0 +1,25 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Binbi.Parser";
+
+service Parser {
+  rpc ParseByQuery (ParseRequest) returns (ParseReply);
+}
+
+message ParseRequest {
+  string Query = 1;
+}
+
+message Article {
+  string Title = 1;
+  string Description = 2;
+  string PublishDate = 3;
+  int64 PublishDateTimeStamp = 4;
+  string ArticleUrl = 5;
+  string Data = 6;
+}
+
+message ParseReply {
+  repeated Article Articles = 1;
+  int64 TotalCount = 2;
+}
