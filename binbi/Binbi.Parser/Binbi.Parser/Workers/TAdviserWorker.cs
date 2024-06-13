@@ -8,6 +8,7 @@ namespace Binbi.Parser.Workers;
 internal class TAdviserWorker : BaseWorker
 {
     private const string BaseUrl = "https://www.tadviser.ru";
+    
     internal TAdviserWorker(ILogger logger, IConfiguration configuration) : base(logger, configuration)
     {
         Logger.LogInformation("TAdviser worker has been initialized");
@@ -21,7 +22,7 @@ internal class TAdviserWorker : BaseWorker
         var htmlDoc = await web.LoadFromWebAsync($"{BaseUrl}/index.php/Служебная:Search?ns30=1&ns132=1&redirs=0&search={query}&limit=500&offset=0");
         var liNodes = htmlDoc.DocumentNode.SelectNodes("//li");
 
-        var tAdviserSearchModel = new TAdviserSearchModel { Items = new List<TAdviserSearchItems>() };
+        var articles = new List<Article>();
 
         if (liNodes == null) return new List<Article>();
         
@@ -34,26 +35,19 @@ internal class TAdviserWorker : BaseWorker
 
             var date = Extensions.ExtractDate(dataNode.InnerText);
             
-            var article = new TAdviserSearchItems
+
+            articles.Add(new Article
             {
                 Title = aNode.GetAttributeValue("title", string.Empty),
                 ArticleUrl = BaseUrl + aNode.GetAttributeValue("href", string.Empty),
+                Description = string.Empty,
                 PublishDate = date.ToString(CultureInfo.CurrentCulture),
                 PublishDateTimeStamp = Extensions.ConvertToTimestamp(date)
-            };
-
-            tAdviserSearchModel.Items.Add(article);
+            });
         }
-        Logger.LogInformation($"search items count: {tAdviserSearchModel.Items.Count}");
+        Logger.LogInformation($"search items count: {articles.Count}");
         
-        return tAdviserSearchModel.Items.Select(item => new Article
-        {
-            Title = item.Title,
-            ArticleUrl = item.ArticleUrl,
-            Description = string.Empty,
-            PublishDate = item.PublishDate,
-            PublishDateTimeStamp = item.PublishDateTimeStamp
-        }).ToList();
+        return articles;
     }
 
     protected override async Task<List<Article>?> GetArticlesAsync(List<Article> articles)

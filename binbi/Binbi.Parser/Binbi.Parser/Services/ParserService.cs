@@ -10,6 +10,7 @@ namespace Binbi.Parser.Services
 
         private readonly RbcWorker _rbcWorker;
         private readonly TAdviserWorker _tAdviserWorker;
+        private readonly CnewsWorker _cnewsWorker;
 
         public ParserService(ILogger<ParserService> logger, IConfiguration configuration)
         {
@@ -22,6 +23,7 @@ namespace Binbi.Parser.Services
 
             _rbcWorker = new RbcWorker(_logger, _httpClient, configuration);
             _tAdviserWorker = new TAdviserWorker(_logger, configuration);
+            _cnewsWorker = new CnewsWorker(_logger, configuration);
         }
 
         public override async Task<ParseReply> ParseByQuery(ParseRequest request, ServerCallContext context)
@@ -40,6 +42,12 @@ namespace Binbi.Parser.Services
             if (tAdviserArticles != null)
             {
                 articles.AddRange(tAdviserArticles);
+            }
+            
+            var cnewsArticles = await GetArticlesAsync(_cnewsWorker, request.Query);
+            if (cnewsArticles != null)
+            {
+                articles.AddRange(cnewsArticles);
             }
 
             var reply = new ParseReply
