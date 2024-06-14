@@ -6,5 +6,5 @@
 
 binbi/Binbi.Parser/.env
 binbi/Binbi.Parser/.idea
-binbi/Binbi.Parser/Binbi.Parser/bin
-binbi/Binbi.Parser/Binbi.Parser/obj
+binbi/Binbi.Parser/Binbi.Parser.gRPC/bin
+binbi/Binbi.Parser/Binbi.Parser.gRPC/obj

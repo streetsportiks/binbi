@@ -11,6 +11,7 @@ namespace Binbi.Parser.Workers;
 internal class RbcWorker : BaseWorker
 {
     private readonly HttpClient _httpClient;
+    
     internal RbcWorker(ILogger logger, HttpClient httpClient, IConfiguration configuration) : base(logger, configuration)
     {
         Logger.LogInformation("Rbc worker has been initialized");

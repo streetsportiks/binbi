@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Binbi.Parser", "Binbi.Parser\Binbi.Parser.csproj", "{B1C8AFB2-79A6-4863-A245-98592724AF00}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Binbi.Parser.gRPC", "Binbi.Parser.gRPC\Binbi.Parser.gRPC.csproj", "{B1C8AFB2-79A6-4863-A245-98592724AF00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
