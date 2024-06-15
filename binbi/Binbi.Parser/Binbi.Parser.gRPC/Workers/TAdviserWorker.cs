@@ -33,7 +33,7 @@ internal class TAdviserWorker : BaseWorker
 
             if (aNode == null || dataNode == null) continue;
 
-            var date = Extensions.ExtractDate(dataNode.InnerText);
+            var date = ExtractDate(dataNode.InnerText);
             
 
             articles.Add(new Article
@@ -78,5 +78,12 @@ internal class TAdviserWorker : BaseWorker
         });
 
         return validArticles;
+    }
+    
+    private static DateTime ExtractDate(string data)
+    {
+        var index = data.IndexOf("- ", StringComparison.Ordinal);
+        
+        return index != -1 ? DateTime.Parse(data[(index + 2)..].Trim()) : default;
     }
 }

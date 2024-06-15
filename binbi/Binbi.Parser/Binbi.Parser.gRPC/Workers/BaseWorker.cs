@@ -1,11 +1,14 @@
-﻿using Binbi.Parser.Helpers;
+﻿using Binbi.Parser.DB.DbClient;
+using Binbi.Parser.DB.Models;
+using Binbi.Parser.Helpers;
 
 namespace Binbi.Parser.Workers;
 
-internal abstract class BaseWorker(ILogger logger, IConfiguration configuration)
+internal abstract class BaseWorker(ILogger logger, IConfiguration configuration, bool saveToDb = true)
 {
     protected readonly ILogger Logger = logger;
     private readonly int _totalItemsCount = configuration.GetValue<int>("ParserOptions:TotalItemsCount");
+    
 
     public async Task<List<Article>?> GetArticlesAsync(string query)
     {
@@ -18,7 +21,33 @@ internal abstract class BaseWorker(ILogger logger, IConfiguration configuration)
         
         Logger.LogInformation("Articles successfully get!");
 
+        if (saveToDb && articles is not null && articles.Count > 0)
+            await SaveToDb(query, articles);
+
         return articles;
+    }
+
+    private async Task SaveToDb(string query, IReadOnlyCollection<Article> articles)
+    {
+        try
+        {
+            var connectionString = configuration.GetValue<string>("ConnectionStrings:MongoDB:ConnectionString");
+            var dbName = configuration.GetValue<string>("ConnectionStrings:MongoDB:DbName");
+
+            if (connectionString is null || dbName is null)
+                logger.LogError("MongoDB 'connectionString' or 'dbName' is null. Check app configuration");
+
+            var mongoDbClient = new MongoDbClient(connectionString!, dbName!, logger);
+            await mongoDbClient.SaveArticlesAsync(new Category
+            {
+                Name = query,
+                Articles = articles.ToDbArticles()
+            });
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex.Message);
+        }
     }
 
     protected abstract Task<List<Article>?> GetSearchResultsAsync(string query);
