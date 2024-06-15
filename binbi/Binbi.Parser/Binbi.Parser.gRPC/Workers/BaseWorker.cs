@@ -31,11 +31,14 @@ internal abstract class BaseWorker(ILogger logger, IConfiguration configuration,
     {
         try
         {
-            var connectionString = configuration.GetValue<string>("ConnectionStrings:MongoDB:ConnectionString");
-            var dbName = configuration.GetValue<string>("ConnectionStrings:MongoDB:DbName");
+            var connectionString = configuration.GetValue<string?>("ConnectionStrings:MongoDB:ConnectionString");
+            var dbName = configuration.GetValue<string?>("ConnectionStrings:MongoDB:DbName");
 
-            if (connectionString is null || dbName is null)
-                logger.LogError("MongoDB 'connectionString' or 'dbName' is null. Check app configuration");
+            if (connectionString.IsNullOrEmpty() || dbName.IsNullOrEmpty())
+            {
+                logger.LogError("MongoDB 'connectionString' or 'dbName' is null. Check app configuration and repeate request");
+                return;
+            }
 
             var mongoDbClient = new MongoDbClient(connectionString!, dbName!, logger);
             await mongoDbClient.SaveArticlesAsync(new Category

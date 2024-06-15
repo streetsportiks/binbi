@@ -32,11 +32,11 @@ namespace Binbi.Parser.Services
 
             var articles = new List<Article>();
 
-            // var rbcArticles = await GetArticlesAsync(_rbcWorker, request.Query);
-            // if (rbcArticles != null)
-            // {
-            //     articles.AddRange(rbcArticles);
-            // }
+            var rbcArticles = await GetArticlesAsync(_rbcWorker, request.Query);
+            if (rbcArticles != null)
+            {
+                articles.AddRange(rbcArticles);
+            }
 
             var tAdviserArticles = await GetArticlesAsync(_tAdviserWorker, request.Query);
             if (tAdviserArticles != null)
@@ -44,11 +44,11 @@ namespace Binbi.Parser.Services
                 articles.AddRange(tAdviserArticles);
             }
             
-            // var cnewsArticles = await GetArticlesAsync(_cnewsWorker, request.Query);
-            // if (cnewsArticles != null)
-            // {
-            //     articles.AddRange(cnewsArticles);
-            // }
+            var cnewsArticles = await GetArticlesAsync(_cnewsWorker, request.Query);
+            if (cnewsArticles != null)
+            {
+                articles.AddRange(cnewsArticles);
+            }
 
             var reply = new ParseReply
             {

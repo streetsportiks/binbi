@@ -67,7 +67,7 @@ internal class CnewsWorker : BaseWorker
         {
             var web = new HtmlWeb();
             var htmlDoc = await web.LoadFromWebAsync(item.ArticleUrl);
-            var articleParts = htmlDoc.DocumentNode.SelectNodes("//div/p");
+            var articleParts = htmlDoc.DocumentNode.SelectNodes("//p");
             var stringBuilder = new StringBuilder();
 
             if (articleParts != null)

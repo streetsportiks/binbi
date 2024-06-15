@@ -8,6 +8,11 @@ internal static class Extensions
         return epoch;
     }
 
+    internal static bool IsNullOrEmpty(this string? data)
+    {
+        return string.IsNullOrEmpty(data);
+    }
+
     internal static List<DB.Models.Article> ToDbArticles(this IEnumerable<Article> articles)
     {
         return articles.Select(article => new DB.Models.Article
