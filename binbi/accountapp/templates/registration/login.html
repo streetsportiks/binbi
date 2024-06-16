@@ -4,47 +4,40 @@
 {% block title %} Binbi {% endblock %}
 
 {% block content %}
+    <section class="form">
 
-<!-- particles.js container -->
-    <div id="particles-js"></div>
-    <script type="text/javascript" src="{% static 'js/particles.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/lib/stats.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/particl_config.js' %}"></script>
+        <div class="content-popup">
 
-    <section class="forms-registration">
-        <h1 class="title">Войти в систему</h1>
-            {% if form.errors %}
-            <p class="error-login">
-                Ваше имя пользователя и пароль не совпали.
-                Пожалуйста повторите попытку
-            </p>
-            {% else %}
-            <p class="text">
-                Введите данные для входа в систему или
-                зарегистрируйтесь
-            </p>
-            {% endif %}
-            <div class="form">
-                <form class="form-field" action="{% url 'login' %}" method="post"> <!--Перенаправление на страницу входа -->
-                    {{ form.as_p }}
-                    {% csrf_token %}
-                    <input type="hidden" name="next" value="{{ next }}"> <!-- Скрытый параметр входа-->
-                    <p class="button_login" ><input class="field_button" type="submit" value="Войти"></p>
-                </form>
-                <p class="form-link">
-                    <a
-                        href="{% url 'password_reset' %}">
-                        Сбросить пароль
-                    </a>
-                    <a
-                        href="{% url 'register' %}">
-                        Регистрация
-                    </a>
+                <div class="form">
+                {% if form.errors %}
+                <p class="error-login">
+                    Ваше имя пользователя и пароль не совпали.
+                    Пожалуйста повторите попытку
                 </p>
+                {% else %}
+                <p class="text">
+                    Введите данные для входа в систему или
+                    зарегистрируйтесь
+                </p>
+                {% endif %}
+                    <form class="form-field" action="{% url 'login' %}" method="post"> <!--Перенаправление на страницу входа -->
+                       <div class="field-content">
+                            {{ form.as_p }}
+                            {% csrf_token %}
+                           <div class="link-popup">
+                                <a class="text-link" href="#">Забыли пароль?</a>
+                            </div>
+                           <div class="link-popup-bottom">
+                            <a class="text-link" href="#">У вас еще нет аккаунта? Регистрация</a>
+                            </div>
+                            <input type="hidden" name="next" value="{{ next }}"> <!-- Скрытый параметр входа-->
+                            <p class="button-field" ><input class="button-field" type="submit" value="Войти"></p>
+                       </div>
+                    </form>
+
+                </div>
             </div>
-
     </section>
-
 {% endblock %}
 
 

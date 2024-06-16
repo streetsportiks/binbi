@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Начать поиск {% endblock %}
+
+{% block content %}
+<section class="start-search-content">
+            <div class="text-content-search">
+                <p class="title-search-content">
+                    Начать поиск анализа
+                </p>
+                <p class="description-search-content">
+                    Выберите шаблон и начните анализ
+                </p>
+            </div>
+            <form action="#">
+                <div class="choice_user">
+                    <div class="content-choice-user">
+                        <input type="radio" id="review_market" value="review_market"
+                        name="user_choice"><label for="review_market" class="light">Обзор рынка</label><br>
+                    </div>
+                    <div class="content-choice-user">
+                        <input type="radio" id="analiz_competitors" value="analiz_competitors"
+                        name="user_choice"><label for="analiz_competitors" class="light">Анализ конкурентов</label>
+                    </div>
+                </div>
+                <div class="start_analiz">
+                    <input class="field-enter-choice" type="text" placeholder="Введите нишу для поиска">
+                    <input class="button-start-analiz" type="submit" value="начать поиск">
+                </div>
+                <p class="help-user">
+                    Процесс анализа запущен по готовности будет доступен в результатах анализа
+                </p>
+
+            </form>
+            <div class="image-table">
+                <img src="/media/image/p-pro__edo-tablet.png" alt="image table">
+            </div>
+        </section>
+{% endblock %}

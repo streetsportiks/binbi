@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Отчет {% endblock %}
+{% block header %}
+    <div class="logo logo-login">
+        <svg width="189.000000" height="46.307617" viewBox="0 0 189 46.3076" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    <desc>
+                                            Created with Pixso.
+                                    </desc>
+                                    <defs>
+                                        <linearGradient x1="29.264362" y1="26.797693" x2="52.474117" y2="34.870659" id="paint_linear_2_15202_0" gradientUnits="userSpaceOnUse">
+                                            <stop offset="0.261731" stop-color="#000000" stop-opacity="0.000000"/>
+                                            <stop offset="1.000000" stop-color="#000000"/>
+                                        </linearGradient>
+                                        <linearGradient x1="24.162750" y1="1.906202" x2="56.062141" y2="18.500612" id="paint_linear_2_15203_0" gradientUnits="userSpaceOnUse">
+                                            <stop stop-color="#000000" stop-opacity="0.000000"/>
+                                            <stop offset="1.000000" stop-color="#000000"/>
+                                        </linearGradient>
+                                        <linearGradient x1="14.407987" y1="27.246185" x2="34.982807" y2="45.130028" id="paint_linear_2_15204_0" gradientUnits="userSpaceOnUse">
+                                            <stop stop-color="#000000" stop-opacity="0.000000"/>
+                                            <stop offset="0.877139" stop-color="#000000"/>
+                                        </linearGradient>
+                                        <linearGradient x1="16.818666" y1="4.148601" x2="20.182379" y2="29.152348" id="paint_linear_2_15205_0" gradientUnits="userSpaceOnUse">
+                                            <stop offset="0.511576" stop-color="#000000" stop-opacity="0.000000"/>
+                                            <stop offset="1.000000" stop-color="#000000"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <path id="Vector" d="M189 7.72L189 38.27L185.4 38.27L185.4 7.72L189 7.72Z" fill="#000000" fill-opacity="1.000000" fill-rule="nonzero"/>
+                                    <path id="Vector" d="M157.93 38.27L157.93 7.72L168.65 7.72C170.78 7.72 172.54 8.08 173.93 8.82C175.32 9.55 176.35 10.53 177.03 11.76C177.7 12.98 178.04 14.34 178.04 15.83C178.04 17.14 177.81 18.23 177.34 19.08C176.88 19.94 176.27 20.61 175.52 21.11C174.77 21.61 173.95 21.98 173.08 22.21L173.08 22.51C174.01 22.57 174.96 22.9 175.9 23.5C176.85 24.09 177.64 24.95 178.28 26.06C178.92 27.18 179.24 28.54 179.24 30.15C179.24 31.68 178.89 33.06 178.19 34.28C177.5 35.51 176.39 36.48 174.89 37.19C173.38 37.91 171.42 38.27 169.01 38.27L157.93 38.27ZM161.64 34.98L169.01 34.98C171.43 34.98 173.15 34.52 174.17 33.58C175.2 32.64 175.71 31.49 175.71 30.15C175.71 29.12 175.45 28.16 174.92 27.29C174.39 26.4 173.63 25.7 172.66 25.17C171.68 24.63 170.52 24.36 169.19 24.36L161.64 24.36L161.64 34.98ZM161.64 21.14L168.53 21.14C169.64 21.14 170.65 20.92 171.55 20.48C172.46 20.05 173.18 19.43 173.7 18.64C174.24 17.84 174.51 16.9 174.51 15.83C174.51 14.49 174.04 13.35 173.11 12.41C172.17 11.47 170.68 11 168.65 11L161.64 11L161.64 21.14Z" fill="#000000" fill-opacity="1.000000" fill-rule="nonzero"/>
+                                    <path id="Vector" d="M129.69 7.72L129.69 38.27L126.09 38.27L109.33 14.28L109.03 14.28L109.03 38.27L105.31 38.27L105.31 7.72L108.91 7.72L125.73 31.76L126.03 31.76L126.03 7.72L129.69 7.72Z" fill="#000000" fill-opacity="1.000000" fill-rule="nonzero"/>
+                                    <path id="Vector" d="M150.49 7.72L150.49 38.27L146.88 38.27L130.13 14.28L129.83 14.28L129.83 38.27L126.1 38.27L126.1 7.72L129.7 7.72L146.52 31.76L146.82 31.76L146.82 7.72L150.49 7.72Z" fill="#000000" fill-opacity="1.000000" fill-rule="nonzero"/>
+                                    <path id="Vector" d="M97.86 7.72L97.86 38.27L94.27 38.27L94.27 7.72L97.86 7.72Z" fill="#000000" fill-opacity="1.000000" fill-rule="nonzero"/>
+                                    <path id="Vector" d="M66.8 38.27L66.8 7.72L77.51 7.72C79.65 7.72 81.41 8.08 82.79 8.82C84.18 9.55 85.21 10.53 85.89 11.76C86.57 12.98 86.91 14.34 86.91 15.83C86.91 17.14 86.68 18.23 86.21 19.08C85.75 19.94 85.14 20.61 84.38 21.11C83.63 21.61 82.82 21.98 81.94 22.21L81.94 22.51C82.88 22.57 83.82 22.9 84.77 23.5C85.72 24.09 86.51 24.95 87.15 26.06C87.79 27.18 88.11 28.54 88.11 30.15C88.11 31.68 87.76 33.06 87.06 34.28C86.36 35.51 85.26 36.48 83.75 37.19C82.25 37.91 80.29 38.27 77.87 38.27L66.8 38.27ZM70.51 34.98L77.87 34.98C80.3 34.98 82.02 34.52 83.03 33.58C84.06 32.64 84.58 31.49 84.58 30.15C84.58 29.12 84.31 28.16 83.78 27.29C83.25 26.4 82.5 25.7 81.52 25.17C80.55 24.63 79.39 24.36 78.05 24.36L70.51 24.36L70.51 34.98ZM70.51 21.14L77.39 21.14C78.51 21.14 79.52 20.92 80.42 20.48C81.32 20.05 82.04 19.43 82.57 18.64C83.11 17.84 83.38 16.9 83.38 15.83C83.38 14.49 82.91 13.35 81.97 12.41C81.03 11.47 79.55 11 77.51 11L70.51 11L70.51 21.14Z" fill="#000000" fill-opacity="1.000000" fill-rule="nonzero"/>
+                                    <path id="Vector 103" d="M33.63 18.5L21.19 41.99L42.92 46.3L56.06 18.5L33.63 18.5Z" fill="#01A2E2" fill-opacity="1.000000" fill-rule="nonzero"/>
+                                    <path id="Vector 103" d="M33.63 18.5L21.19 41.99L42.92 46.3L56.06 18.5L33.63 18.5Z" fill="url(#paint_linear_2_15202_0)" fill-opacity="0.200000" fill-rule="nonzero"/>
+                                    <path id="Vector 104" d="M14.23 2.8L33.63 18.49L56.06 18.49L35.2 0.05L14.23 2.8Z" fill="#A4D176" fill-opacity="1.000000" fill-rule="nonzero"/>
+                                    <path id="Vector 104" d="M14.23 2.8L33.63 18.49L56.06 18.49L35.2 0.05L14.23 2.8Z" fill="url(#paint_linear_2_15203_0)" fill-opacity="0.200000" fill-rule="nonzero"/>
+                                    <path id="Vector 105" d="M0 27.3L21.3 41.99L42.99 46.3L19.45 29.2L0 27.3Z" fill="#FFD665" fill-opacity="0.700000" fill-rule="nonzero"/>
+                                    <path id="Vector 105" d="M0 27.3L21.3 41.99L42.99 46.3L19.45 29.2L0 27.3Z" fill="url(#paint_linear_2_15204_0)" fill-opacity="0.200000" fill-rule="nonzero"/>
+                                    <path id="Vector 102" d="M14.23 2.8L0 27.3L19.45 29.2L35.37 0L14.23 2.8Z" fill="#F70707" fill-opacity="0.700000" fill-rule="nonzero"/>
+                                    <path id="Vector 102" d="M14.23 2.8L0 27.3L19.45 29.2L35.37 0L14.23 2.8Z" fill="url(#paint_linear_2_15205_0)" fill-opacity="0.100000" fill-rule="nonzero"/>
+                                </svg>
+    </div>
+{%endblock%}
+{% block content %}
+    <section class="single-report">
+        <div class="top-reports single-top-report">
+            <div class="text-content-single-report">
+                <p class="title-reports">
+                    {{ report.name }}
+                </p>
+                <p class="description-report">
+                    {{ template.name }}
+                </p>
+            </div>
+        </div>
+        <div class="contents-report">
+            {% for name_rep in list_report %}
+                <div class="content-report">
+                    <div class="title-report">
+                        <p class="text-title-report">
+                            {% if name_rep == 'defining_niche' %}
+                                Определение продуктовой ниши
+                            {% elif name_rep == 'voluem_market' %}
+                                Обьём рынка
+                            {% elif name_rep == 'list_key_players' %}
+                                Перечень ключевых игроков
+                            {% elif name_rep == 'key_consumers' %}
+                                 Ключевые потребители
+                            {% elif name_rep == 'development_trends' %}
+                                Тренды развития рассматриваемой ниши
+                            {% endif %}
+
+                        </p>
+                        <p class="description-single-report">
+                            {% if name_rep == 'defining_niche' %}
+                                    {% for key, val in report.defining_niche.items %}
+                                        {% if  key  == 'definition' %}
+                                            {{ val }}
+                                        {% endif %}
+                                    {% endfor %}
+                            {% elif name_rep == 'voluem_market' %}
+                                    {% for key, val in report.voluem_market.items %}
+                                        {% if  key  == 'voluem_market_type' %}
+                                            {{ val }}
+                                        {% endif %}
+                                    {% endfor %}
+                            {% elif name_rep == 'development_trends' %}
+                                    {% for key, val in report.list_common_products.items %}
+                                        {% if  key  == 'development_trends_market' %}
+                                            {{ val }}
+                                        {% endif %}
+                                    {% endfor %}
+                            {% endif %}
+
+                        </p>
+                    </div>
+                    <div class="betwene-line"></div>
+                    <div class="title-report">
+                       {% if name_rep == 'defining_niche' %}
+                            <p class="text-subtitle">
+                                Разновидность  по типу:
+                            </p>
+                            <p class="description-single-report">
+                                    {% for key, val in report.defining_niche.items %}
+                                        {% if  key  == 'variety_by_type' %}
+                                            {{ val }}
+                                        {% endif %}
+                                    {% endfor %}
+                            </p>
+                       {% elif name_rep == 'voluem_market' %}
+                            <p class="text-subtitle">
+                                Объем рынка в России:
+                            </p>
+                            <p class="description-single-report">
+                                    {% for key, val in report.voluem_market.items %}
+                                        {% if  key  == 'CAGR' %}
+                                            {{ val }}
+                                        {% endif %}
+                                    {% endfor %}
+                            </p>
+                       {% elif name_rep == 'list_key_players' %}
+                            <p class="text-subtitle">
+                                Ключевые компании на рынке РФ
+                            </p>
+                            <p class="description-single-report">
+                                    {% for key, val in report.list_key_players.items %}
+                                        {% if  key  == 'key_brends' %}
+                                            {{ val }}
+                                        {% endif %}
+                                    {% endfor %}
+                            </p>
+                       {% elif name_rep == 'key_consumers' %}
+                            <p class="text-subtitle">
+                                Ключевые потребители на рынке
+                            </p>
+                            <p class="description-single-report">
+                                    {% for key, val in report.list_key_consumers.items %}
+                                        {% if  key  == 'key_cons' %}
+                                            {{ val }}
+                                        {% endif %}
+                                    {% endfor %}
+                            </p>
+                       {% elif name_rep == 'development_trends' %}
+                            <p class="text-subtitle">
+                                Факторы роста:
+                            </p>
+                            <p class="description-single-report">
+                                    {% for key, val in report.list_common_products.items %}
+                                        {% if  key  == 'growth_factors' %}
+                                            {{ val }}
+                                        {% endif %}
+                                    {% endfor %}
+                            </p>
+                       {% endif %}
+                    </div>
+                    {% if name_rep != 'key_consumers' %}
+                        <div class="betwene-line"></div>
+                    {% endif %}
+                    <div class="title-repor">
+                    {% if name_rep == 'defining_niche' %}
+                        <p class="text-subtitle">
+                            Разновидность по назначению:
+                        </p>
+                        <p class="description-single-report">
+
+                                {% for key, val in report.defining_niche.items %}
+                                    {% if  key  == 'varieties _by_purpose' %}
+                                        {{ val }}
+                                    {% endif %}
+                                {% endfor %}
+                        </p>
+                    {% elif name_rep == 'voluem_market' %}
+                        <p class="text-subtitle">
+                           Структура рынка по типу:
+                        </p>
+                        <p class="description-single-report">
+                                {% for key, val in report.voluem_market.items %}
+                                    {% if  key  == 'structure_by_segment' %}
+                                        {{ val }}
+                                    {% endif %}
+                                {% endfor %}
+                        </p>
+                    {% elif name_rep == 'list_key_players' %}
+                        <p class="text-subtitle">
+                           Ключевые поставщики:
+                        </p>
+                        <p class="description-single-report">
+                                    {% for key, val in report.list_key_players.items %}
+                                        {% if  key  == 'key_brends_rus' %}
+                                            {{ val }}
+                                        {% endif %}
+                                    {% endfor %}
+                            </p>
+                    {% elif name_rep == 'development_trends' %}
+                            <p class="text-subtitle">
+                                Ограничения роста:
+                            </p>
+                            <p class="description-single-report">
+                                    {% for key, val in report.list_common_products.items %}
+                                        {% if  key  == 'growth_restrictions' %}
+                                            {{ val }}
+                                        {% endif %}
+                                    {% endfor %}
+                            </p>
+                    {% endif %}
+                    </div>
+
+            </div>
+            {% endfor %}
+    </section>
+{% endblock %}

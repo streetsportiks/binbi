@@ -4,13 +4,11 @@
 {% block title %} Главная страница {% endblock %}
 
 {% block content %}
-    <script>
-        var element = document.querySelector('.main');
-        element.classList.add('main-board');
-
-    </script>
     <section class="content-start-page">
 
-    </section>
+         <div class="quick_choice">
+             <a href="{% url 'templates_editor' %}" title="Начать поиск"><h2>Начать поиск</h2></a>
+         </div>
 
+    </section>
 {% endblock %}

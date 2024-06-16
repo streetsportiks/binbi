@@ -1,0 +1,19 @@
+Metadata-Version: 2.1
+Name: ho
+Version: 0.0.4
+Summary: Created on 24.11.2012
+Home-page: https://github.com/thorwhalen/uu/tree/master/ho
+Author: Thor Whalen
+License: apache-2.0
+Platform: any
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+
+# ho
+Created on 24.11.2012
+
+
+To install:	```pip install ho```
+
+
