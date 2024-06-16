@@ -1,0 +1,363 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Отчет {% endblock %}
+{% block content %}
+    <section class="single-report">
+        <div class="top-reports single-top-report">
+            <div class="text-content-single-report">
+                <p class="title-reports">
+                    {{ report.name }}
+                </p>
+                <p class="description-report">
+                    {{ template.name }}
+                </p>
+            </div>
+            <div class="link-back">
+                <svg width="24.000000" height="24.000000" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <desc>
+                            Created with Pixso.
+                    </desc>
+                    <defs>
+                        <clipPath id="clip84_133917">
+                            <rect id="icon / jam-icons / outline &amp; logos / chevron-right" width="24.000000" height="24.000000" transform="translate(24.000000 24.000000) rotate(180.000000)" fill="white" fill-opacity="0"/>
+                        </clipPath>
+                    </defs>
+                    <rect id="icon / jam-icons / outline &amp; logos / chevron-right" width="24.000000" height="24.000000" transform="translate(24.000000 24.000000) rotate(180.000000)" fill="#FFFFFF" fill-opacity="0"/>
+                    <g clip-path="url(#clip84_133917)">
+                        <path id="Vector" d="M10.68 11.92L15.63 16.87C15.81 17.06 15.91 17.32 15.91 17.58C15.91 17.84 15.8 18.09 15.62 18.28C15.43 18.46 15.18 18.57 14.92 18.57C14.66 18.57 14.41 18.47 14.22 18.29L8.56 12.63C8.37 12.44 8.27 12.19 8.27 11.92C8.27 11.66 8.37 11.4 8.56 11.22L14.22 5.56C14.41 5.38 14.66 5.28 14.92 5.28C15.18 5.28 15.43 5.39 15.62 5.57C15.8 5.76 15.91 6.01 15.91 6.27C15.91 6.53 15.81 6.79 15.63 6.97L10.68 11.92Z" fill="#697077" fill-opacity="1.000000" fill-rule="nonzero"/>
+                    </g>
+                </svg>
+                <a class="link-return" href="{% url 'start_analiz' %}">Назад к поиску</a>
+            </div>
+        </div>
+        <div class="contents-report">
+            {% for name_rep in list_report %}
+                <div class="content-report">
+                    <div class="title-report">
+                        <p class="text-title-report">
+                            {% if name_rep == 'defining_niche' %}
+                                Определение продуктовой ниши
+                            {% elif name_rep == 'voluem_market' %}
+                                Обьём рынка
+                            {% elif name_rep == 'list_key_players' %}
+                                Перечень ключевых игроков
+                            {% elif name_rep == 'key_consumers' %}
+                                 Ключевые потребители
+                            {% elif name_rep == 'development_trends' %}
+                                Тренды развития рассматриваемой ниши
+                            {% endif %}
+
+                        </p>
+                        <p class="description-single-report">
+                            {% if name_rep == 'defining_niche' %}
+                                    {% for key, val in report.defining_niche.items %}
+                                        {% if  key  == 'definition' %}
+                                            {{ val }}
+                                        {% endif %}
+                                    {% endfor %}
+                            {% elif name_rep == 'voluem_market' %}
+                                    {% for key, val in report.voluem_market.items %}
+                                        {% if  key  == 'voluem_market_type' %}
+                                            <div id="container" style="width: 380px;">
+                                                <canvas class="population-chart zero"></canvas>
+                                              </div>
+                                        {% endif %}
+                                    {% endfor %}
+                            {% elif name_rep == 'development_trends' %}
+                                    {% for key, val in report.list_common_products.items %}
+                                        {% if  key  == 'development_trends_market' %}
+                                            {{ val }}
+                                        {% endif %}
+                                    {% endfor %}
+                            {% endif %}
+
+                        </p>
+                    </div>
+                    <div class="betwene-line"></div>
+                    <div class="title-report">
+                       {% if name_rep == 'defining_niche' %}
+                            <p class="text-subtitle">
+                                Разновидность  по типу:
+                            </p>
+                            <p class="description-single-report">
+                                    {% for key, val in report.defining_niche.items %}
+                                        {% if  key  == 'variety_by_type' %}
+                                            {{ val }}
+                                        {% endif %}
+                                    {% endfor %}
+                            </p>
+                       {% elif name_rep == 'voluem_market' %}
+                            <p class="text-subtitle">
+                                Объем рынка в России:
+                            </p>
+                            <p class="description-single-report">
+                                    {% for key, val in report.voluem_market.items %}
+                                        {% if  key  == 'CAGR' %}
+                                              <div id="container-1" style="width: 380px;">
+                                                <canvas class="population-chart"></canvas>
+                                              </div>
+                                        {% endif %}
+                                    {% endfor %}
+                            </p>
+                       {% elif name_rep == 'list_key_players' %}
+                            <p class="text-subtitle">
+                                Ключевые компании на рынке РФ
+                            </p>
+                            <p class="description-single-report">
+                                    {% for key, val in report.list_key_players.items %}
+                                        {% if  key  == 'key_brends' %}
+                                            <div id="container-3" style="width: 450px;">
+                                                <canvas class="population-chart"></canvas>
+                                              </div>
+                                        {% endif %}
+                                    {% endfor %}
+                            </p>
+                       {% elif name_rep == 'key_consumers' %}
+                            <p class="text-subtitle">
+                                Ключевые потребители на рынке
+                            </p>
+                            <p class="description-single-report">
+                                    {% for key, val in report.list_key_consumers.items %}
+                                        {% if  key  == 'key_cons' %}
+                                             <div id="container-5" style="width: 500px;">
+                                                <canvas class="population-chart"></canvas>
+                                              </div>
+                                        {% endif %}
+                                    {% endfor %}
+                            </p>
+                       {% elif name_rep == 'development_trends' %}
+                            <p class="text-subtitle">
+                                Факторы роста:
+                            </p>
+                            <p class="description-single-report">
+                                    {% for key, val in report.list_common_products.items %}
+                                        {% if  key  == 'growth_factors' %}
+                                            {{ val }}
+                                        {% endif %}
+                                    {% endfor %}
+                            </p>
+                       {% endif %}
+                    </div>
+                    {% if name_rep != 'key_consumers' %}
+                        <div class="betwene-line"></div>
+                    {% endif %}
+                    <div class="title-repor">
+                    {% if name_rep == 'defining_niche' %}
+                        <p class="text-subtitle">
+                            Разновидность по назначению:
+                        </p>
+                        <p class="description-single-report">
+
+                                {% for key, val in report.defining_niche.items %}
+                                    {% if  key  == 'varieties _by_purpose' %}
+                                        {{ val }}
+                                    {% endif %}
+                                {% endfor %}
+                        </p>
+                    {% elif name_rep == 'voluem_market' %}
+                        <p class="text-subtitle">
+                           Структура рынка по типу:
+                        </p>
+                        <p class="description-single-report">
+                                {% for key, val in report.voluem_market.items %}
+                                    {% if  key  == 'structure_by_segment' %}
+                                            <div id="container-2" style="width: 500px;">
+                                                <canvas class="population-chart"></canvas>
+                                              </div>
+                                    {% endif %}
+                                {% endfor %}
+                        </p>
+                    {% elif name_rep == 'list_key_players' %}
+                        <p class="text-subtitle">
+                           Ключевые поставщики:
+                        </p>
+                        <p class="description-single-report">
+                                    {% for key, val in report.list_key_players.items %}
+                                        {% if  key  == 'key_brends_rus' %}
+                                             <div id="container-4" style="width: 450px;">
+                                                <canvas class="population-chart"></canvas>
+                                              </div>
+                                        {% endif %}
+                                    {% endfor %}
+                            </p>
+                    {% elif name_rep == 'development_trends' %}
+                            <p class="text-subtitle">
+                                Ограничения роста:
+                            </p>
+                            <p class="description-single-report">
+                                    {% for key, val in report.list_common_products.items %}
+                                        {% if  key  == 'growth_restrictions' %}
+                                            {{ val }}
+                                        {% endif %}
+                                    {% endfor %}
+                            </p>
+                    {% endif %}
+                    </div>
+
+            </div>
+            {% endfor %}
+        <div class="link-choice link-choice-single-report">
+            <a class="link-download" href="{%url 'download_pdf' report.id %}">Скачать</a>
+            <a class="link-share" href="#">Поделиться</a>
+        </div>
+    </section>
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+  <script>
+
+    $(function () {
+
+      var $populationChart = $(".population-chart");
+      $.ajax({
+        url: $populationChart.data("url"),
+        success: function (data) {
+          for (let i = 0; i < $populationChart.length ; i++) {
+              console.log(document.getElementsByClassName('zero'));
+            var ctx = $populationChart[i].getContext("2d");
+              if (i==0){
+                  new Chart(ctx, {
+                                    type: 'pie',
+                                    data: {
+                                      labels: {{ labels_volem_common|safe }},
+                                      datasets: [{
+                                        label: '%',
+                                        backgroundColor: ['grey', 'blue','red','yellow','violet','green','brown'],
+                                        data: {{ data_volem_common|safe }}
+                                      }]
+                                    },
+                                    options: {
+                                      responsive: true,
+                                      legend: {
+                                        position: 'top',
+                                      },
+                                      title: {
+                                        display: true,
+                                      }
+                                    }
+                                  });
+              }
+              else if(i==1){
+                  new Chart(ctx, {
+                                    type: 'doughnut',
+                                    data: {
+                                      labels: {{ labels_gagr|safe }},
+                                      datasets: [{
+                                        label: '%',
+                                        backgroundColor: ['grey', 'blue'],
+                                        data: {{ data_gagr|safe }}
+                                      }]
+                                    },
+                                    options: {
+                                      responsive: true,
+                                      legend: {
+                                        position: 'top',
+                                      },
+                                      title: {
+                                        display: true,
+                                      }
+                                    }
+                                  });
+              }
+              else if(i==2){
+                                    new Chart(ctx, {
+                                    type: 'bar',
+                                    data: {
+                                      labels: {{ labels_volem_type|safe }},
+                                      datasets: [{
+                                        label: '%',
+                                        backgroundColor: ['grey', 'blue','red','yellow'],
+                                        data: {{ data_volem_type|safe }}
+                                      }]
+                                    },
+                                    options: {
+                                      responsive: true,
+                                      legend: {
+                                        position: 'top',
+                                      },
+                                      title: {
+                                        display: true,
+                                      }
+                                    }
+                                  });
+              }
+              else if(i==3){
+                                    new Chart(ctx, {
+                                    type: 'pie',
+                                    data: {
+                                      labels: {{ labels_key_company_world|safe }},
+                                      datasets: [{
+                                        label: '%',
+                                        backgroundColor: ['grey', 'blue','red','yellow','green','brown','violet','orange'],
+                                        data: {{ data_key_company_world|safe }}
+                                      }]
+                                    },
+                                    options: {
+                                      responsive: true,
+                                      legend: {
+                                        position: 'top',
+                                      },
+                                      title: {
+                                        display: true,
+                                      }
+                                    }
+                                  });
+              }
+              else if(i==4){
+                                    new Chart(ctx, {
+                                    type: 'bar',
+                                    data: {
+                                      labels: {{ labels_key_company_rus|safe }},
+                                      datasets: [{
+                                        label: '%',
+                                        backgroundColor: ['grey', 'blue','red','yellow'],
+                                        data: {{ data_key_company_rus|safe }}
+                                      }]
+                                    },
+                                    options: {
+                                      responsive: true,
+                                      legend: {
+                                        position: 'top',
+                                      },
+                                      title: {
+                                        display: true,
+                                      }
+                                    }
+                                  });
+              }
+              else if(i==5){
+                                    new Chart(ctx, {
+                                    type: 'bar',
+                                    data: {
+                                      labels: {{ labels_key_consumers|safe }},
+                                      datasets: [{
+                                        label: '%',
+                                        backgroundColor: ['grey', 'blue','red','yellow'],
+                                        data: {{ data_key_consumers|safe }}
+                                      }]
+                                    },
+                                    options: {
+                                      responsive: true,
+                                      legend: {
+                                        position: 'top',
+                                      },
+                                      title: {
+                                        display: true,
+                                      }
+                                    }
+                                  });
+              }
+          }
+
+
+        }
+      });
+
+    });
+
+
+
+  </script>
+
+
+{% endblock %}
