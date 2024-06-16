@@ -1,0 +1,55 @@
+services:
+  db:
+    image: postgres:14.5
+    restart: always
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  rabbit:
+    image: rabbitmq:3.13.1-management
+    container_name: 'rabbitmq'
+    restart: always
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+  celery:
+    restart: always
+    build:
+      context: .
+    command: sh -c "cd binbi/ && celery -A binbi worker -l info"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    depends_on:
+      - rabbit
+
+  web:
+    build: .
+    command: ["./wait-for-it.sh", "db:5432", "--",
+              "uwsgi", "--ini", "/code/config/uwsgi/uwsgi.ini",
+              ]
+    restart: always
+    volumes:
+      - .:/code
+    environment:
+      - DJANGO_SETTINGS_MODULE=binbi.settings.prod
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    depends_on:
+      - db
+      - rabbit
+
+  nginx:
+    image: nginx:1.25.5
+    restart: always
+    volumes:
+      - ./config/nginx:/etc/nginx/templates
+      - .:/code
+    ports:
+      - "80:80"
