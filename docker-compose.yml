@@ -16,17 +16,17 @@ services:
       - 5672:5672
       - 15672:15672
 
-  celery:
-    restart: always
-    build:
-      context: .
-    command: sh -c "cd binbi/ && celery -A binbi worker -l info"
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-    depends_on:
-      - rabbit
+#  celery:
+#    restart: always
+#    build:
+#      context: .
+#    command: sh -c "cd binbi/ && celery -A binbi worker -l info"
+#    environment:
+#      - POSTGRES_DB=postgres
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_PASSWORD=postgres
+#    depends_on:
+#      - rabbit
 
   web:
     build: .
@@ -37,7 +37,7 @@ services:
     volumes:
       - .:/code
     environment:
-      - DJANGO_SETTINGS_MODULE=binbi.settings.prod
+      - DJANGO_SETTINGS_MODULE=binbi.settings
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -52,4 +52,4 @@ services:
       - ./config/nginx:/etc/nginx/templates
       - .:/code
     ports:
-      - "80:80"
+      - "100:80"

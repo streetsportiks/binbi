@@ -4,7 +4,7 @@ upstream uwsgi_app {
 
 server{
     listen 80;
-    server_name www.binbi.com binbi.com
+    server_name www.bii.com bii.com
     error_log   stderr warn;
     access_log  /dev/stdout main;
     client_max_body_size 100M;
