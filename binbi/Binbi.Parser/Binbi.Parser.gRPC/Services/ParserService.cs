@@ -1,9 +1,12 @@
-﻿using Binbi.Parser.DB.DbClient;
+﻿using Binbi.Parser.Common;
 using Binbi.Parser.Workers;
 using Grpc.Core;
 
 namespace Binbi.Parser.Services
 {
+    /// <summary>
+    /// Parser service
+    /// </summary>
     public class ParserService : Parser.ParserBase
     {
         private readonly ILogger<ParserService> _logger;
@@ -12,26 +15,39 @@ namespace Binbi.Parser.Services
         private readonly TAdviserWorker _tAdviserWorker;
         private readonly CnewsWorker _cnewsWorker;
 
-        public ParserService(ILogger<ParserService> logger, IConfiguration configuration)
+        /// <summary>
+        /// Initialize parser service
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="configuration"></param>
+        /// <param name="tAdviserWorker"></param>
+        /// <param name="cnewsWorker"></param>
+        /// <param name="rbcWorker"></param>
+        public ParserService(ILogger<ParserService> logger, IConfiguration configuration, RbcWorker rbcWorker, TAdviserWorker tAdviserWorker, CnewsWorker cnewsWorker)
         {
             _logger = logger;
+            _rbcWorker = rbcWorker;
+            _tAdviserWorker = tAdviserWorker;
+            _cnewsWorker = cnewsWorker;
 
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
             httpClient.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
             httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 YaBrowser/24.4.0.0 Safari/537.36");
-
-            _rbcWorker = new RbcWorker(_logger, httpClient, configuration);
-            _tAdviserWorker = new TAdviserWorker(_logger, configuration);
-            _cnewsWorker = new CnewsWorker(_logger, configuration);
         }
 
+        /// <summary>
+        /// Parses sites by query string
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public override async Task<ParseReply> ParseByQuery(ParseRequest request, ServerCallContext context)
         {
-            _logger.LogInformation("Parsing started...");
+            _logger.LogInformationEx("Parsing started...");
 
             var articles = new List<Article>();
-
+            
             var rbcArticles = await GetArticlesAsync(_rbcWorker, request.Query);
             if (rbcArticles != null)
             {
@@ -67,7 +83,7 @@ namespace Binbi.Parser.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error getting articles: {ex.Message}");
+                _logger.LogErrorEx("An error occurred while receiving the articles", ex);
                 return null;
             }
         }

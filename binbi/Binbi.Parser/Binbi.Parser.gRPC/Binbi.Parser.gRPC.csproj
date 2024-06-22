@@ -8,24 +8,30 @@
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>$(NoWarn);1591</NoWarn>
+    </PropertyGroup>
+
     <ItemGroup>
         <Protobuf Include="Protos\parser.proto" GrpcServices="Server"/>
+        <Protobuf Include="Protos\report.proto" GrpcServices="Server"/>
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Grpc.AspNetCore" Version="2.57.0"/>
         <PackageReference Include="HtmlAgilityPack" Version="1.11.61" />
+        <PackageReference Include="Microsoft.AspNetCore.Grpc.Swagger" Version="0.8.6" />
         <PackageReference Include="Serilog" Version="4.0.0" />
+        <PackageReference Include="Serilog.Enrichers.CallerInfo" Version="1.0.4" />
+        <PackageReference Include="Serilog.Enrichers.WithCaller" Version="1.2.0" />
         <PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />
         <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Binbi.Parser.Common\Binbi.Parser.Common.csproj" />
       <ProjectReference Include="..\Binbi.Parser.DB\Binbi.Parser.DB.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Models\Enums\" />
     </ItemGroup>
 
     <ItemGroup>

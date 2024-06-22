@@ -1,0 +1,23 @@
+﻿syntax = "proto3";
+
+// Report service
+service Report {
+  // Returns report by query
+  rpc GetReport (GetReportRequest) returns (ReportReply);
+}
+
+message GetReportRequest {
+  // Query string fot get report
+  string Query = 1;
+  // Report type
+  string TypeReport = 2;
+}
+
+message ReportReply {
+  string Title = 1;
+  string Description = 2;
+  string Url = 3;
+  string Date = 4;
+  string Content = 5;
+  string TypeReport = 6;
+}

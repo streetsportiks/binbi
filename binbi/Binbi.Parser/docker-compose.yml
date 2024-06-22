@@ -1,0 +1,40 @@
+﻿version: '3.9'
+
+networks:
+  api-network:
+    driver: bridge
+
+services:
+  app:
+    image: ${DOCKER_REGISTRY-}app
+    container_name: api
+    build:
+      context: .
+      dockerfile: Binbi.Parser.gRPC/Dockerfile
+    ports:
+      - "7268:7268"
+      - "5227:5227"
+    networks:
+      - api-network
+    environment:
+      ASPNETCORE_ENVIRONMENT: 'Development'
+      ASPNETCORE_URLS: 'http://[::]:5227'
+      ParserOptions:TotalItemsCount: '150'
+      ParserOptions:SaveToDb: 'true'
+      ConnectionStrings:MongoDB:ConnectionString: 'mongodb://mongodb:27017/'
+      ConnectionStrings:MongoDB:DbName: 'binbi_parser_articles'
+    depends_on:
+      - mongodb
+    
+  mongodb:
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - api-network
+
+volumes:
+  mongo-data:
+  app:

@@ -2,11 +2,14 @@
 
 option csharp_namespace = "Binbi.Parser";
 
+//  Parser service
 service Parser {
+  // Parses sites by query string
   rpc ParseByQuery (ParseRequest) returns (ParseReply);
 }
 
 message ParseRequest {
+  // Query string for parsing
   string Query = 1;
 }
 

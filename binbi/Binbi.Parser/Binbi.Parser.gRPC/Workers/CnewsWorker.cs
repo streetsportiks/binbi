@@ -1,22 +1,34 @@
 ﻿using System.Globalization;
 using System.Text;
-using Binbi.Parser.Models;
+using Binbi.Parser.Common;
 using HtmlAgilityPack;
 
 namespace Binbi.Parser.Workers;
 
-internal class CnewsWorker : BaseWorker
+/// <summary>
+/// The worker who parses the site https://www.cnews.ru
+/// </summary>
+public class CnewsWorker : BaseWorker
 {
     private const string BaseUrl = "https://www.cnews.ru";
 
-    public CnewsWorker(ILogger logger, IConfiguration configuration) : base(logger, configuration)
+    /// <summary>
+    /// Initialize worker
+    /// </summary>
+    /// <param name="logger"></param>
+    /// <param name="configuration"></param>
+    public CnewsWorker(ILogger<CnewsWorker> logger, IConfiguration configuration) : base(logger, configuration)
     {
-        Logger.LogInformation("Cnews worker has been initialized");
+        Logger.LogInformationEx("Cnews worker has been initialized");
+        
+        var saveToDb = configuration.GetValue<bool>("ParserOptions:SaveToDb");
+        if (saveToDb) InitMongoDb(configuration);
     }
-    
+
+    /// <inheritdoc />
     protected override async Task<List<Article>?> GetSearchResultsAsync(string query)
     {
-        Logger.LogInformation($"getting items by search query: {query}...");
+        Logger.LogInformationEx($"getting items by search query: {query}...");
 
         var articles = new List<Article>();
         var web = new HtmlWeb();
@@ -36,14 +48,14 @@ internal class CnewsWorker : BaseWorker
 
                 if (aNode == null || dataNode == null) continue;
 
-                var date = DateTime.Parse(dataNode.InnerText);
+                var date = dataNode.InnerText.TryParseDate();
             
                 var article = new Article
                 {
                     Title = aNode.InnerText,
                     ArticleUrl = "https:" + aNode.GetAttributeValue("href", string.Empty),
                     PublishDate = date.ToString(CultureInfo.CurrentCulture),
-                    PublishDateTimeStamp = Extensions.ConvertToTimestamp(date),
+                    PublishDateTimeStamp = date.ConvertToTimestamp(),
                     Description = string.Empty
                 };
 
@@ -54,11 +66,12 @@ internal class CnewsWorker : BaseWorker
             await Task.Delay(500);
         }
         
-        Logger.LogInformation($"search items count: {articles.Count}");
+        Logger.LogInformationEx($"search items count: {articles.Count}");
 
         return articles;
     }
 
+    /// <inheritdoc />
     protected override async Task<List<Article>?> GetArticlesAsync(List<Article> articles)
     {
         var validArticles = new List<Article>();
