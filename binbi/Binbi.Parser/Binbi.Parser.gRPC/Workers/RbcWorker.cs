@@ -1,42 +1,70 @@
-﻿using System.Collections.Concurrent;
-using System.Net;
+﻿using System.Net;
 using System.Text;
 using System.Text.Json;
+using Binbi.Parser.Common;
 using Binbi.Parser.Helpers;
 using Binbi.Parser.Models;
 using HtmlAgilityPack;
 
 namespace Binbi.Parser.Workers;
 
-internal class RbcWorker : BaseWorker
+/// <summary>
+/// The worker who parses the site https://www.rbc.ru
+/// </summary>
+public class RbcWorker : BaseWorker
 {
     private readonly HttpClient _httpClient;
-    
-    internal RbcWorker(ILogger logger, HttpClient httpClient, IConfiguration configuration) : base(logger, configuration)
+
+    /// <summary>
+    /// Initialize worker
+    /// </summary>
+    /// <param name="logger"></param>
+    /// <param name="httpClient"></param>
+    /// <param name="configuration"></param>
+    public RbcWorker(ILogger<RbcWorker> logger, HttpClient httpClient, IConfiguration configuration) : base(logger, configuration)
     {
-        Logger.LogInformation("Rbc worker has been initialized");
+        Logger.LogInformationEx("Rbc worker has been initialized");
+        
+        var saveToDb = configuration.GetValue<bool>("ParserOptions:SaveToDb");
+        if (saveToDb) InitMongoDb(configuration);
 
         _httpClient = httpClient;
     }
 
+    /// <inheritdoc />
     protected override async Task<List<Article>?> GetSearchResultsAsync(string query)
     {
-        Logger.LogInformation($"getting items by search query: {query}...");
+        Logger.LogInformationEx($"getting items by search query: {query}...");
         
         var rbcSearchModel = new RbcSearchModel { Items = new List<RbcSearchItems>() };
         
-        HttpStatusCode statusCode;
+        var statusCode = HttpStatusCode.NoContent;
         var page = 0;
+        
+        const int retryCount = 3;
+        var attempt = 0;
         
         do
         {
-            var response = await _httpClient.GetAsync($"https://www.rbc.ru/search/ajax/?query={query}&page={page}");
-            statusCode = response.StatusCode;
+            var response = new HttpResponseMessage();
+            
+            while (attempt < retryCount)
+            {
+                response = await _httpClient.GetAsync($"https://www.rbc.ru/search/ajax/?query={query}&page={page}");
+                statusCode = response.StatusCode;
 
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    Logger.LogInformationEx("Retry get response from RBC...");
+                    attempt++;
+                }
+                else break;
+            }
+            
             if (response.StatusCode != HttpStatusCode.OK) break;
             
             var contentByteArray = response.Content.ReadAsByteArrayAsync().Result;
-            var deserializedRbcSearchModel = JsonSerializer.Deserialize<RbcSearchModel>(Compressor.Decompress(contentByteArray));
+            var deserializedRbcSearchModel = JsonSerializer.Deserialize<RbcSearchModel>(contentByteArray);
             
             if (deserializedRbcSearchModel?.Items is null || deserializedRbcSearchModel.Items.Count == 0)
                 continue;
@@ -46,7 +74,7 @@ internal class RbcWorker : BaseWorker
 
         } while (statusCode == HttpStatusCode.OK);
 
-        Logger.LogInformation($"search items count: {rbcSearchModel.Items.Count}");
+        Logger.LogInformationEx($"search items count: {rbcSearchModel.Items.Count}");
         
         return rbcSearchModel.Items.Select(item => new Article
         {
@@ -58,6 +86,7 @@ internal class RbcWorker : BaseWorker
         }).ToList();
     }
 
+    /// <inheritdoc />
     protected override async Task<List<Article>?> GetArticlesAsync(List<Article> articles)
     {
         var validArticles = new List<Article>();

@@ -9,6 +9,9 @@ binbi/Binbi.Parser/.idea
 binbi/Binbi.Parser/Binbi.Parser.gRPC/bin
 binbi/Binbi.Parser/Binbi.Parser.gRPC/obj
 binbi/Binbi.Parser/.env
+binbi/Binbi.Parser/.vs
 binbi/Binbi.Parser/.idea
 binbi/Binbi.Parser/Binbi.Parser.DB/bin
 binbi/Binbi.Parser/Binbi.Parser.DB/obj
+binbi/Binbi.Parser/Binbi.Parser.Common/bin
+binbi/Binbi.Parser/Binbi.Parser.Common/obj

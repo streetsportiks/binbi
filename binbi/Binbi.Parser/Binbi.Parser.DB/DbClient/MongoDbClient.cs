@@ -1,5 +1,7 @@
-﻿using Binbi.Parser.DB.Models;
+﻿using Binbi.Parser.Common;
+using Binbi.Parser.DB.Models;
 using Microsoft.Extensions.Logging;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 
@@ -31,9 +33,33 @@ public class MongoDbClient
         }
     }
 
+    public async Task<bool> CheckDbConnectionAsync()
+    {
+        _logger.LogInformationEx("Checking db connection...");
+
+        try
+        {
+            var result = await _mongoDatabase.RunCommandAsync((Command<BsonDocument>)"{ping:1}");
+
+            if (result.Names.Contains("ok"))
+            {
+                _logger.LogInformationEx("Connection is established");
+                return true;
+            }
+            
+            _logger.LogInformationEx("Connection has not been established");   
+            return false;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogInformationEx("Connection has not been established with error", ex);   
+            return false;
+        }
+    }
+
     public async Task SaveArticlesAsync(Category category)
     {
-        _logger.LogInformation("Start saving to db...");
+        _logger.LogInformationEx("Start saving to db...");
         
         var catCollection = _mongoDatabase.GetCollection<Category>("category");
 
@@ -43,7 +69,7 @@ public class MongoDbClient
 
         if (existingCategory != null)
         {
-            _logger.LogInformation("Adding new articles into exist category...");
+            _logger.LogInformationEx("Adding new articles into exist category...");
             var newArticles = category.Articles
                 .Where(article => existingCategory.Articles.All(existingArticle => existingArticle.ArticleUrl != article.ArticleUrl))
                 .ToList();
@@ -58,13 +84,13 @@ public class MongoDbClient
                     update);
             }
             
-            _logger.LogInformation($"Successfully updated category: {category.Name} with '{newArticles.Count}' articles to db!");
+            _logger.LogInformationEx($"Successfully updated category: {category.Name} with '{newArticles.Count}' articles to db!");
         }
         else
         {
-            _logger.LogInformation("Creating new category...");
+            _logger.LogInformationEx("Creating new category...");
             await catCollection.InsertOneAsync(category);
-            _logger.LogInformation($"Successfully created category: {category.Name} with '{category.Articles.Count}' articles to db!");
+            _logger.LogInformationEx($"Successfully created category: {category.Name} with '{category.Articles.Count}' articles to db!");
         }
         
     }
