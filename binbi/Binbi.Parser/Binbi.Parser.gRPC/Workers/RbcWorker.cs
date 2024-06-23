@@ -21,7 +21,7 @@ public class RbcWorker : BaseWorker
     /// <param name="logger"></param>
     /// <param name="httpClient"></param>
     /// <param name="configuration"></param>
-    public RbcWorker(ILogger<RbcWorker> logger, HttpClient httpClient, IConfiguration configuration) : base(logger, configuration)
+    public RbcWorker(ILogger<RbcWorker> logger, HttpClient httpClient, IConfiguration configuration) : base(logger, configuration, httpClient)
     {
         Logger.LogInformationEx("Rbc worker has been initialized");
         

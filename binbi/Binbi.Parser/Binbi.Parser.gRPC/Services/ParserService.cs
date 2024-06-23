@@ -48,19 +48,19 @@ namespace Binbi.Parser.Services
 
             var articles = new List<Article>();
             
-            var rbcArticles = await GetArticlesAsync(_rbcWorker, request.Query);
+            var rbcArticles = await GetArticlesAsync(_rbcWorker, request.Query, request.TypeReport);
             if (rbcArticles != null)
             {
                 articles.AddRange(rbcArticles);
             }
 
-            var tAdviserArticles = await GetArticlesAsync(_tAdviserWorker, request.Query);
+            var tAdviserArticles = await GetArticlesAsync(_tAdviserWorker, request.Query, request.TypeReport);
             if (tAdviserArticles != null)
             {
                 articles.AddRange(tAdviserArticles);
             }
             
-            var cnewsArticles = await GetArticlesAsync(_cnewsWorker, request.Query);
+            var cnewsArticles = await GetArticlesAsync(_cnewsWorker, request.Query, request.TypeReport);
             if (cnewsArticles != null)
             {
                 articles.AddRange(cnewsArticles);
@@ -75,11 +75,11 @@ namespace Binbi.Parser.Services
             return reply;
         }
 
-        private async Task<List<Article>?> GetArticlesAsync(BaseWorker worker, string query)
+        private async Task<List<Article>?> GetArticlesAsync(BaseWorker worker, string query, string reportType)
         {
             try
             {
-                return await worker.GetArticlesAsync(query);
+                return await worker.GetArticlesAsync(query, reportType);
             }
             catch (Exception ex)
             {

@@ -18,9 +18,9 @@ internal static class Extensions
             }).ToList();
     }
 
-    internal static List<AiReportModel> ToAiReportModel(this ParseReply parseReply, string reportType)
+    internal static IEnumerable<AiArticleModel> ToAiArticleModels(this IEnumerable<Article> articles, string reportType)
     {
-        return parseReply.Articles.Select(replyArticle => new AiReportModel
+        return articles.Select(replyArticle => new AiArticleModel
             {
                 Title = replyArticle.Title,
                 Description = replyArticle.Description,
@@ -28,6 +28,6 @@ internal static class Extensions
                 Date = replyArticle.PublishDate,
                 TypeReport = reportType,
                 Url = replyArticle.ArticleUrl
-            }).ToList();
+            });
     }
 }

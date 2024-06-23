@@ -2,6 +2,7 @@
 using Binbi.Parser.DB.DbClient;
 using Binbi.Parser.DB.Models;
 using Binbi.Parser.Helpers;
+using Binbi.Parser.Models;
 using MongoDB.Driver;
 
 namespace Binbi.Parser.Workers;
@@ -9,25 +10,39 @@ namespace Binbi.Parser.Workers;
 /// <summary>
 /// Base worker class for parses
 /// </summary>
-/// <param name="logger"></param>
-/// <param name="configuration"></param>
-public abstract class BaseWorker(ILogger logger, IConfiguration configuration)
+public abstract class BaseWorker
 {
-    private MongoDbClient? _mongoDbClient;
-    
     /// <summary>
     /// Logger who will log worker actions
     /// </summary>
-    protected readonly ILogger Logger = logger;
-    private readonly bool _saveToDb = configuration.GetValue<bool>("ParserOptions:SaveToDb");
-    private readonly int _totalItemsCount = configuration.GetValue<int>("ParserOptions:TotalItemsCount");
+    protected readonly ILogger Logger;
     
+    private MongoDbClient? _mongoDbClient;
+    private HttpClient _httpClient;
+    
+    private readonly bool _saveToDb;
+    private readonly int _totalItemsCount;
+    private readonly string _aiBaseUrl;
+
+    protected BaseWorker(ILogger logger, IConfiguration configuration, HttpClient httpClient)
+    {
+        Logger = logger;
+        _httpClient = httpClient;
+
+        _saveToDb = configuration.GetValue<bool>("ParserOptions:SaveToDb");
+        _totalItemsCount = configuration.GetValue<int>("ParserOptions:TotalItemsCount");
+        _aiBaseUrl = configuration.GetValue<string>("ConnectionStrings:AiBaseUrl")!;
+        
+        Logger.LogInformationEx($"Configuration:\nSaveToDb - '{_saveToDb}'\nTotalItemsCount - '{_totalItemsCount}'");
+    }
+
     /// <summary>
     /// Get article list by query
     /// </summary>
     /// <param name="query">Query</param>
+    /// <param name="reportType"></param>
     /// <returns><see cref="Article"/> list</returns>
-    public async Task<List<Article>?> GetArticlesAsync(string query)
+    public async Task<List<Article>?> GetArticlesAsync(string query, string reportType)
     {
         if (_saveToDb && _mongoDbClient is not null && !await _mongoDbClient.CheckDbConnectionAsync())
         {
@@ -47,7 +62,8 @@ public abstract class BaseWorker(ILogger logger, IConfiguration configuration)
 
         if (_saveToDb && articles is not null && articles.Count > 0)
         {
-            await SaveToDb(query, articles);
+            await LoadToAiAsync(articles.ToAiArticleModels(reportType));
+            await SaveToDbAsync(query, articles);
         }
 
         return articles;
@@ -71,8 +87,34 @@ public abstract class BaseWorker(ILogger logger, IConfiguration configuration)
 
         _mongoDbClient = new MongoDbClient(connectionString!, dbName!, Logger);
     }
+
+    private async Task LoadToAiAsync(IEnumerable<AiArticleModel> articles)
+    {
+        try
+        {
+            var existArticles = await _httpClient.GetFromJsonAsync<List<AiArticleModel>>(_aiBaseUrl + "/api/v1/article/findAllArticles");
+
+            if (existArticles is null || existArticles.Count == 0)
+            {
+                Logger.LogWarnEx("Empty articles for load to ai");
+                return;
+            }
+            
+            foreach (var article in articles)
+            {
+                if (existArticles.Select(a => a.Url).Contains(article.Url))
+                    continue;
+
+                await _httpClient.PostAsJsonAsync(_aiBaseUrl + "/api/v1/article/addArticle", article);
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogErrorEx("An error has occurred", ex);
+        }
+    }
     
-    private async Task SaveToDb(string query, IReadOnlyCollection<Article> articles)
+    private async Task SaveToDbAsync(string query, IReadOnlyCollection<Article> articles)
     {
         try
         {

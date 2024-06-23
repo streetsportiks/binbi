@@ -48,4 +48,12 @@ public static class Extensions
         logger.LogError(ex, "{Message} (at {File}:{LineNumber})", message, file, lineNumber);
     }
 
+
+    public static void LogWarnEx(this ILogger logger, string message, Exception? ex = null,
+        [CallerFilePath] string file = "",
+        [CallerLineNumber] int lineNumber = 0)
+    {
+        logger.LogWarning(ex, "{Message} (at {File}:{LineNumber})", message, file, lineNumber);
+    }
+
 }

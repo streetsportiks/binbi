@@ -16,8 +16,9 @@ public class CnewsWorker : BaseWorker
     /// Initialize worker
     /// </summary>
     /// <param name="logger"></param>
+    /// <param name="httpClient"></param>
     /// <param name="configuration"></param>
-    public CnewsWorker(ILogger<CnewsWorker> logger, IConfiguration configuration) : base(logger, configuration)
+    public CnewsWorker(ILogger<CnewsWorker> logger, HttpClient httpClient, IConfiguration configuration) : base(logger, configuration, httpClient)
     {
         Logger.LogInformationEx("Cnews worker has been initialized");
         

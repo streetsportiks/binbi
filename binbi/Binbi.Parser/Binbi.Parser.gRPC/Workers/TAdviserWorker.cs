@@ -11,13 +11,14 @@ namespace Binbi.Parser.Workers;
 public class TAdviserWorker : BaseWorker
 {
     private const string BaseUrl = "https://www.tadviser.ru";
-    
+
     /// <summary>
     /// Initialize worker
     /// </summary>
     /// <param name="logger"></param>
+    /// <param name="httpClient"></param>
     /// <param name="configuration"></param>
-    public TAdviserWorker(ILogger<TAdviserWorker> logger, IConfiguration configuration) : base(logger, configuration)
+    public TAdviserWorker(ILogger<TAdviserWorker> logger, HttpClient httpClient, IConfiguration configuration) : base(logger, configuration, httpClient)
     {
         Logger.LogInformationEx("TAdviser worker has been initialized");
         

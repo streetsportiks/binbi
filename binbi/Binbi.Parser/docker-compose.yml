@@ -23,6 +23,7 @@ services:
       ParserOptions:SaveToDb: 'true'
       ConnectionStrings:MongoDB:ConnectionString: 'mongodb://mongodb:27017/'
       ConnectionStrings:MongoDB:DbName: 'binbi_parser_articles'
+      ConnectionStrings:AiBaseUrl": 'http://31.128.33.228:8080'
     depends_on:
       - mongodb
     

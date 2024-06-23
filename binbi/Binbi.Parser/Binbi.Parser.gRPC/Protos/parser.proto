@@ -11,6 +11,8 @@ service Parser {
 message ParseRequest {
   // Query string for parsing
   string Query = 1;
+  // Report type
+  string TypeReport = 2;
 }
 
 message Article {

@@ -40,7 +40,7 @@ public class ReportService : Report.ReportBase
             
             var parseReply = await _parserService.ParseByQuery(new ParseRequest { Query = getReportRequest.Query }, context);
             
-            var toAi = parseReply.ToAiReportModel(getReportRequest.TypeReport);
+            var toAi = parseReply.Articles.ToAiArticleModels(getReportRequest.TypeReport);
             // Отсылаем запрос на генерацию
         }
         

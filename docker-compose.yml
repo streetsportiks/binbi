@@ -53,3 +53,42 @@ services:
       - .:/code
     ports:
       - "100:80"
+
+  app:
+    image: ${DOCKER_REGISTRY-}app
+    container_name: parser
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "7268:7268"
+      - "5227:5227"
+    networks:
+      - api-network
+    environment:
+      ASPNETCORE_ENVIRONMENT: 'Development'
+      ASPNETCORE_URLS: 'http://[::]:5227'
+      ParserOptions:TotalItemsCount: '150'
+      ParserOptions:SaveToDb: 'true'
+      ConnectionStrings:MongoDB:ConnectionString: 'mongodb://mongodb:27017/'
+      ConnectionStrings:MongoDB:DbName: 'binbi_parser_articles'
+      ConnectionStrings:AiBaseUrl": 'http://31.128.33.228:8080'
+    depends_on:
+      - mongodb
+  
+  mongodb:
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - api-network
+
+networks:
+  api-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
+  app:
