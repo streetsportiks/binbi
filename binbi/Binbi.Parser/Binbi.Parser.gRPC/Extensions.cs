@@ -1,4 +1,5 @@
-﻿using Binbi.Parser.Common;
+﻿using System.Globalization;
+using Binbi.Parser.Common;
 using Binbi.Parser.Models;
 
 namespace Binbi.Parser;
@@ -29,5 +30,29 @@ internal static class Extensions
                 TypeReport = reportType,
                 Url = replyArticle.ArticleUrl
             });
+    }
+
+    internal static ReportReply ToReportReply(this AiReportModel reportModel)
+    {
+        return new ReportReply
+        {
+            Id = reportModel.Id,
+            Title = reportModel.Title ?? string.Empty,
+            Description = reportModel.Description ?? string.Empty,
+            Created = reportModel.Created ?? string.Empty,
+            Updated = reportModel.Updated ?? string.Empty,
+            NumberOfSources = reportModel.NumberOfSources,
+            Language = reportModel.Language ?? string.Empty,
+            TypeReport = reportModel.TypeReport ?? string.Empty,
+            ReportTitle = reportModel.ReportTitle ?? string.Empty,
+            ReportIntroduction = reportModel.ReportIntroduction ?? string.Empty,
+            MarketSegmentation = reportModel.MarketSegmentation ?? string.Empty,
+            MarketSize = reportModel.MarketSize ?? string.Empty,
+            KeyPlayers = reportModel.KeyPlayers ?? string.Empty,
+            ConsumerDemographics = reportModel.ConsumerDemographics ?? string.Empty,
+            MarketTrends = reportModel.MarketTrends ?? string.Empty,
+            MarketOpportunities = reportModel.MarketOpportunities ?? string.Empty,
+            ReportConclusion = reportModel.ReportConclusion ?? string.Empty
+        };
     }
 }
