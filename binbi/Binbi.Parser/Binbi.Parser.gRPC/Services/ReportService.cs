@@ -47,12 +47,22 @@ public class ReportService : Report.ReportBase
     {
         await _parserService.ParseByQuery(new ParseRequest { Query = getReportRequest.Query }, context);
 
-         if (!await CreateReportASync(getReportRequest.TypeReport, getReportRequest.Title, getReportRequest.Description))
-         {
-             return null;
-         }
+        var report = new AiReportModel();
 
-        var report = await GetReportAsync(getReportRequest.TypeReport, getReportRequest.Language);
+        try
+        {
+            if (!await CreateReportASync(getReportRequest.TypeReport, getReportRequest.Title,
+                    getReportRequest.Description))
+            {
+                return null;
+            }
+
+            report = await GetReportAsync(getReportRequest.TypeReport, getReportRequest.Language);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogErrorEx("An error was occurred:", ex);
+        }
         
         return report.ToReportReply();
     }
