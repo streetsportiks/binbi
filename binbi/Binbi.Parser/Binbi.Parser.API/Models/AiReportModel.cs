@@ -1,4 +1,4 @@
-﻿namespace Binbi.Parser.Models;
+﻿namespace Binbi.Parser.API.Models;
 
 /// <summary>
 /// Модель отчёта для его загрузки в ИИ

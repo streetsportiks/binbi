@@ -10,7 +10,7 @@ services:
     container_name: api
     build:
       context: .
-      dockerfile: Binbi.Parser.gRPC/Dockerfile
+      dockerfile: Binbi.Parser.API/Dockerfile
     ports:
       - "7268:7268"
       - "5227:5227"

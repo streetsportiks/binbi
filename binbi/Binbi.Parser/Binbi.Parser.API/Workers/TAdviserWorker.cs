@@ -1,9 +1,10 @@
 ﻿using System.Globalization;
 using System.Text;
 using Binbi.Parser.Common;
+using Binbi.Parser.DB.Models;
 using HtmlAgilityPack;
 
-namespace Binbi.Parser.Workers;
+namespace Binbi.Parser.API.Workers;
 
 /// <summary>
 /// The worker who parses the site https://www.tadviser.ru
@@ -53,7 +54,7 @@ public class TAdviserWorker : BaseWorker
                 Title = aNode.GetAttributeValue("title", string.Empty),
                 ArticleUrl = BaseUrl + aNode.GetAttributeValue("href", string.Empty),
                 Description = string.Empty,
-                PublishDate = date.ToString(CultureInfo.CurrentCulture),
+                PublishDate = date,
                 PublishDateTimeStamp = date.ConvertToTimestamp()
             });
         }

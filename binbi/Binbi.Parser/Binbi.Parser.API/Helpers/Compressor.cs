@@ -1,7 +1,7 @@
 ﻿using System.IO.Compression;
 using System.Text;
 
-namespace Binbi.Parser.Helpers;
+namespace Binbi.Parser.API.Helpers;
 
 internal static class Compressor
 {

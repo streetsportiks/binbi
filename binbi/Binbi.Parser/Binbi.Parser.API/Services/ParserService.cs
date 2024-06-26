@@ -1,13 +1,15 @@
-﻿using Binbi.Parser.Common;
-using Binbi.Parser.Workers;
-using Grpc.Core;
+﻿using Binbi.Parser.API.Models.Request;
+using Binbi.Parser.API.Models.Response;
+using Binbi.Parser.API.Workers;
+using Binbi.Parser.Common;
+using Binbi.Parser.DB.Models;
 
-namespace Binbi.Parser.Services
+namespace Binbi.Parser.API.Services
 {
     /// <summary>
     /// Parser service
     /// </summary>
-    public class ParserService : Parser.ParserBase
+    public class ParserService
     {
         private readonly ILogger<ParserService> _logger;
 
@@ -39,26 +41,23 @@ namespace Binbi.Parser.Services
         /// <summary>
         /// Parses sites by query string
         /// </summary>
-        /// <param name="request"></param>
-        /// <param name="context"></param>
-        /// <returns></returns>
-        public override async Task<ParseReply> ParseByQuery(ParseRequest request, ServerCallContext context)
+        public async Task<ParseByQueryResponse> ParseByQueryAsync(ParseByQueryRequest request)
         {
             _logger.LogInformationEx("Parsing started...");
 
             var articles = new List<Article>();
             
-            var rbcArticles = await GetArticlesAsync(_rbcWorker, request.Query, request.TypeReport);
-            if (rbcArticles != null)
-            {
-                articles.AddRange(rbcArticles);
-            }
-
-            var tAdviserArticles = await GetArticlesAsync(_tAdviserWorker, request.Query, request.TypeReport);
-            if (tAdviserArticles != null)
-            {
-                articles.AddRange(tAdviserArticles);
-            }
+            // var rbcArticles = await GetArticlesAsync(_rbcWorker, request.Query, request.TypeReport);
+            // if (rbcArticles != null)
+            // {
+            //     articles.AddRange(rbcArticles);
+            // }
+            //
+            // var tAdviserArticles = await GetArticlesAsync(_tAdviserWorker, request.Query, request.TypeReport);
+            // if (tAdviserArticles != null)
+            // {
+            //     articles.AddRange(tAdviserArticles);
+            // }
             
             var cnewsArticles = await GetArticlesAsync(_cnewsWorker, request.Query, request.TypeReport);
             if (cnewsArticles != null)
@@ -66,9 +65,10 @@ namespace Binbi.Parser.Services
                 articles.AddRange(cnewsArticles);
             }
 
-            var reply = new ParseReply
+            var reply = new ParseByQueryResponse
             {
-                TotalCount = articles.Count
+                TotalCount = articles.Count,
+                Articles = new List<Article>()
             };
             reply.Articles.AddRange(articles);
 

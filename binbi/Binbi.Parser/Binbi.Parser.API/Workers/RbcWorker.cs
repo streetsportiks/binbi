@@ -1,12 +1,12 @@
 ﻿using System.Net;
 using System.Text;
 using System.Text.Json;
+using Binbi.Parser.API.Models;
 using Binbi.Parser.Common;
-using Binbi.Parser.Helpers;
-using Binbi.Parser.Models;
+using Binbi.Parser.DB.Models;
 using HtmlAgilityPack;
 
-namespace Binbi.Parser.Workers;
+namespace Binbi.Parser.API.Workers;
 
 /// <summary>
 /// The worker who parses the site https://www.rbc.ru
@@ -78,10 +78,10 @@ public class RbcWorker : BaseWorker
         
         return rbcSearchModel.Items.Select(item => new Article
         {
-            Title = item.Title,
-            ArticleUrl = item.ArticleUrl,
+            Title = item.Title!,
+            ArticleUrl = item.ArticleUrl!,
             Description = item.Body ?? string.Empty,
-            PublishDate = item.PublishDate,
+            PublishDate = item.PublishDate!.TryParseDate(),
             PublishDateTimeStamp = item.PublishDateTimeStamp
         }).ToList();
     }

@@ -1,4 +1,4 @@
-﻿namespace Binbi.Parser.Models;
+﻿namespace Binbi.Parser.API.Models;
 
 public class TAdviserSearchModel
 {

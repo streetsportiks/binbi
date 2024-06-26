@@ -1,40 +1,41 @@
 ﻿using System.Globalization;
-using Binbi.Parser.Common;
-using Binbi.Parser.Models;
+using Binbi.Parser.API.Models;
+using Binbi.Parser.API.Models.Response;
+using Binbi.Parser.DB.Models;
 
-namespace Binbi.Parser;
+namespace Binbi.Parser.API;
 
-internal static class Extensions
+public static class Extensions
 {
-    internal static List<DB.Models.Article> ToDbArticles(this IEnumerable<Article> articles)
+    public static List<Article> ToDbArticles(this IEnumerable<Article> articles)
     {
-        return articles.Select(article => new DB.Models.Article
+        return articles.Select(article => new Article
             {
                 ArticleUrl = article.ArticleUrl,
                 Data = article.Data,
                 Description = article.Description,
-                PublishDate = article.PublishDate.TryParseDate(),
+                PublishDate = article.PublishDate,
                 PublishDateTimeStamp = article.PublishDateTimeStamp,
                 Title = article.Title
             }).ToList();
     }
 
-    internal static IEnumerable<AiArticleModel> ToAiArticleModels(this IEnumerable<Article> articles, string reportType)
+    public static IEnumerable<AiArticleModel> ToAiArticleModels(this IEnumerable<Article> articles, string reportType)
     {
         return articles.Select(replyArticle => new AiArticleModel
             {
                 Title = replyArticle.Title,
                 Description = replyArticle.Description,
                 Content = replyArticle.Data,
-                Date = replyArticle.PublishDate,
+                Date = replyArticle.PublishDate.ToString(CultureInfo.CurrentCulture),
                 TypeReport = reportType,
                 Url = replyArticle.ArticleUrl
             });
     }
 
-    internal static ReportReply ToReportReply(this AiReportModel reportModel)
+    public static GetReportResponse ToReportResponse(this AiReportModel reportModel)
     {
-        return new ReportReply
+        return new GetReportResponse
         {
             Id = reportModel.Id,
             Title = reportModel.Title ?? string.Empty,

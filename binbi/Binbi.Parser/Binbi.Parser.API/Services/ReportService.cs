@@ -1,14 +1,15 @@
 ﻿using System.Net;
+using Binbi.Parser.API.Models;
+using Binbi.Parser.API.Models.Request;
+using Binbi.Parser.API.Models.Response;
 using Binbi.Parser.Common;
-using Binbi.Parser.Models;
-using Grpc.Core;
 
-namespace Binbi.Parser.Services;
+namespace Binbi.Parser.API.Services;
 
 /// <summary>
 /// Report service
 /// </summary>
-public class ReportService : Report.ReportBase
+public class ReportService
 {
     private readonly ParserService _parserService;
     private readonly ILogger<ReportService> _logger;
@@ -40,18 +41,25 @@ public class ReportService : Report.ReportBase
     /// <summary>
     /// Get report by query
     /// </summary>
-    /// <param name="getReportRequest"></param>
-    /// <param name="context"></param>
-    /// <returns></returns>
-    public override async Task<ReportReply?> GetReport(GetReportRequest getReportRequest, ServerCallContext context)
+    /// <param name="getReportRequest">Request args</param>
+    /// <returns><see cref="GetReportResponse"/></returns>
+    public async Task<GetReportResponse?> GetReportAsync(GetReportRequest getReportRequest)
     {
-        await _parserService.ParseByQuery(new ParseRequest { Query = getReportRequest.Query }, context);
+        var actualReport = await GetReportAsync(getReportRequest.TypeReport, getReportRequest.Language);
+        if (actualReport.Updated.IsNullOrEmpty() && actualReport.Created.TryParseDate() > DateTime.Now.AddDays(-7))
+            return actualReport.ToReportResponse();
+        
+        await _parserService.ParseByQueryAsync(new ParseByQueryRequest
+        {
+            Query = getReportRequest.Query, 
+            TypeReport = getReportRequest.TypeReport
+        });
 
         var report = new AiReportModel();
 
         try
         {
-            if (!await CreateReportASync(getReportRequest.TypeReport, getReportRequest.Title,
+            if (!await CreateReportAsync(getReportRequest.TypeReport, getReportRequest.Title,
                     getReportRequest.Description))
             {
                 return null;
@@ -64,10 +72,10 @@ public class ReportService : Report.ReportBase
             _logger.LogErrorEx("An error was occurred:", ex);
         }
         
-        return report.ToReportReply();
+        return report.ToReportResponse();
     }
 
-    private async Task<bool> CreateReportASync(string typeReport, string title, string description)
+    private async Task<bool> CreateReportAsync(string typeReport, string title, string? description)
     {
         var body = new
         {

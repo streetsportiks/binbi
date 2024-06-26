@@ -1,7 +1,6 @@
 ﻿using System.Text;
-using Serilog;
 
-namespace Binbi.Parser.Helpers;
+namespace Binbi.Parser.API.Helpers;
 
 internal class ProgressBar
 {

@@ -1,11 +1,12 @@
-﻿using Binbi.Parser.Common;
+﻿using System.Text.Json;
+using Binbi.Parser.API.Helpers;
+using Binbi.Parser.API.Models;
+using Binbi.Parser.Common;
 using Binbi.Parser.DB.DbClient;
 using Binbi.Parser.DB.Models;
-using Binbi.Parser.Helpers;
-using Binbi.Parser.Models;
 using MongoDB.Driver;
 
-namespace Binbi.Parser.Workers;
+namespace Binbi.Parser.API.Workers;
 
 /// <summary>
 /// Base worker class for parses
@@ -57,12 +58,13 @@ public abstract class BaseWorker
         
         
         var articles = await GetArticlesAsync(searchModel);
-        
+        if (articles is null || articles.Count == 0) return default;
         Logger.LogInformationEx("Articles successfully get!");
+        
+        await LoadToAiAsync(articles.ToAiArticleModels(reportType));
 
-        if (_saveToDb && articles is not null && articles.Count > 0)
+        if (_saveToDb)
         {
-            await LoadToAiAsync(articles.ToAiArticleModels(reportType));
             await SaveToDbAsync(query, articles);
         }
 
@@ -88,11 +90,17 @@ public abstract class BaseWorker
         _mongoDbClient = new MongoDbClient(connectionString!, dbName!, Logger);
     }
 
+    private async Task<List<AiArticleModel>?> GetAllArticlesFromAiAsync()
+    {
+        var articles = await _httpClient.GetFromJsonAsync<List<AiArticleModel>>(_aiBaseUrl + "/api/v1/article/findAllArticles");
+        return articles;
+    }
+    
     private async Task LoadToAiAsync(IEnumerable<AiArticleModel> articles)
     {
         try
         {
-            var existArticles = await _httpClient.GetFromJsonAsync<List<AiArticleModel>>(_aiBaseUrl + "/api/v1/article/findAllArticles");
+            var existArticles = await GetAllArticlesFromAiAsync();
 
             if (existArticles is null || existArticles.Count == 0)
             {
@@ -104,8 +112,9 @@ public abstract class BaseWorker
             {
                 if (existArticles.Select(a => a.Url).Contains(article.Url))
                     continue;
-
-                await _httpClient.PostAsJsonAsync(_aiBaseUrl + "/api/v1/article/addArticle", article);
+                var asd = JsonSerializer.Serialize(article);
+                var response = await _httpClient.PostAsJsonAsync(_aiBaseUrl + "/api/v1/article/addArticle", article);
+                var message = await response.Content.ReadAsStringAsync();
             }
         }
         catch (Exception ex)

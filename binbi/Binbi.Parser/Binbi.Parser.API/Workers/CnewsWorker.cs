@@ -1,9 +1,10 @@
 ﻿using System.Globalization;
 using System.Text;
 using Binbi.Parser.Common;
+using Binbi.Parser.DB.Models;
 using HtmlAgilityPack;
 
-namespace Binbi.Parser.Workers;
+namespace Binbi.Parser.API.Workers;
 
 /// <summary>
 /// The worker who parses the site https://www.cnews.ru
@@ -55,7 +56,7 @@ public class CnewsWorker : BaseWorker
                 {
                     Title = aNode.InnerText,
                     ArticleUrl = "https:" + aNode.GetAttributeValue("href", string.Empty),
-                    PublishDate = date.ToString(CultureInfo.CurrentCulture),
+                    PublishDate = date,
                     PublishDateTimeStamp = date.ConvertToTimestamp(),
                     Description = string.Empty
                 };
